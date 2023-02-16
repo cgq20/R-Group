@@ -1,0 +1,41 @@
+Answers for Practical 1
+6.2) Then experiment informally with each of the programs to get a feel for how they each work, and make a few notes on each to discuss with us in the assessment. This should be done with your robot not driving on the ground, but held or upside down so that the wheels don’t touch the ground.
+
+What happens in each case if you use your hand to try to gently slow down the running motor? 
+	 
+	Resistance and motor tries to continue running.
+		 
+
+What can you observe in the power and velocity of the motor? Why?
+	LEGO_motor_position - power increases, velocity stays constant
+		LEGO_motor_power - power remains constant, velocity decreases
+		LEGO_motor_dps - powers increases, velocity remains constant 
+
+
+We will assess this part by discussing it with your group, and perhaps by asking you to run these programs to show us.
+6.3) We will ask you to demonstrate your robot driving in an accurate square to us.
+	-
+6.4) 
+What is the approximate scatter range of the different outcomes?
+	Scatter range of x coordinates: ~1.7cm (3.1-1.4)
+	Scatter range of y coordinates: ~3.7cm (4.0-0.3)
+ Is there a systematic error (meaning that the final locations are consistently different from the ideal result with an error in the same direction)? 
+Yes there is a systematic error, there is a consistent error in the final locations towards the same direction.
+Is there much scatter, such that the points are quite spread out from each other?
+	No, the points are not very spread out from each other.
+
+
+
+
+
+6.5) Covariance Matrix:
+
+
+7) 
+• Which causes a larger effect on your robot, imprecision in drive distance or rotation angle?
+Rotation angle because the error gets multiplied whereas the error only gets added in drive distance. The motion of the robot is also in straight lines and it only covers short distances.
+
+• Can you think of any robot designs which would be able to move more precisely?
+Something to reduce friction - use of pen instead of pencil, check that the two motors are running perfectly in sync.
+• How should we go about equipping a robot to recover from the motion drift we have observed in this experiment?
+Light sensor for line so that it stays on track

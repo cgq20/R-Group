@@ -1,0 +1,93 @@
+import time     
+import brickpi3 
+import math 
+
+walls = [["x", 0, 210, 0],["x", 0, 84, 168], ["x", 84, 168, 210], ["x",168, 210, 84], ["y", 0, 168, 0], ["y", 126, 210, 84], ["y", 84, 210, 168], ["y", 0, 84, 210]]
+
+def distance(x, y, theta, Ax, Ay, Bx, By):
+    m = ((By-Ay)*(Ax-x)-(Bx-Ax)*(Ay-y))/((By-Ay)*math.cos(theta)-(Bx-Ax)*math.sin(theta))
+    return (m)
+
+def calculate_likelihood(x, y, theta, z):
+    
+    mod_theta = (theta % (math.pi * 2))
+    temporary_distance = 500
+    m = 500
+            
+    if ((theta % math.pi) == 0) :
+
+        for wall in walls:
+            if ((wall[0] == "y") and (wall[1] < y) and (y < wall[2])):
+                if (((mod_theta < (math.pi /2)) or ((theta % (math.pi * 2)) > (math.pi * 3/2)))  and wall[3] > x):
+                    
+                        m = abs(x - wall[3])
+                        
+
+                elif ((mod_theta > (math.pi /2)) and ((theta % (math.pi * 2)) < (math.pi * 3/2)) and wall[3] > x):
+                    
+                         m = abs(x - wall[3])
+            if ( m < temporary_distance):
+                temporary_distance = m
+                                
+            
+        print(temporary_distance)    
+        
+    elif (theta % (math.pi/2) == 0):
+        print("correct")
+        
+        for wall in walls:
+            if ((wall[0] == "x") and (wall[1] < x) and (x < wall[2])):
+                if (mod_theta < math.pi and wall[3] > y):
+                
+                    print("c2")
+                        
+                    m = abs(y - wall[3])
+                        
+                elif (mod_theta > math.pi and wall[3] < y):
+                    print("c3")
+                    
+                    m = abs(y - wall[3])
+                
+            if ( m < temporary_distance):
+                temporary_distance = m   
+                
+        print(temporary_distance)                
+        
+    else :
+        a = math.sin(theta)/math.cos(theta)
+        b = y - a * x
+        
+        
+        for wall in walls:
+            if (wall[0] == "x"):
+                intersect_x = (wall[3] -b)/a
+                if ( wall[1] <= intersect_x <= wall[2]):
+                    if (mod_theta < math.pi and wall[3] > y):
+                        
+                        m = distance(x, y, mod_theta, wall[1], wall[3], wall[2], wall[3])
+                        
+                    elif (mod_theta > math.pi and wall[3] < y):
+                    
+                        m = distance(x, y, mod_theta, wall[1], wall[3], wall[2], wall[3])
+            else :
+                intersect_y = a * wall[3] + b
+                
+                if ( wall[1] <= intersect_y <= wall[2]):
+                    if (((mod_theta < (math.pi /2)) or ((theta % (math.pi * 2)) > (math.pi * 3/2)))  and wall[3] > x):
+                    
+                        m = distance(x, y, mod_theta, wall[3], wall[1], wall[3], wall[2])
+
+                    elif ((mod_theta > (math.pi /2)) and ((theta % (math.pi * 2)) < (math.pi * 3/2))  and wall[3] > x):
+                    
+                        m = distance(x, y, mod_theta, wall[3], wall[1], wall[3], wall[2]) 
+                        
+            if (m < temporary_distance):
+                temporary_distance = m
+        print(temporary_distance)
+    
+calculate_likelihood(20, 20 , math.pi/4 ,0)    
+    
+
+    
+    
+    

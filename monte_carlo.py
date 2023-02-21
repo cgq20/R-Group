@@ -26,6 +26,7 @@ def forward(d):
     
     BP.set_motor_position(BP.PORT_A, int(d * 360/(math.pi * WHEEL_RADIUS)))
     BP.set_motor_position(BP.PORT_D, int(d * 360/(math.pi * WHEEL_RADIUS)))
+    #Should this be (d * 360/(2 * math.pi * WHEEL_RADIUS)))
     
     BP.offset_motor_encoder(BP.PORT_A, BP.get_motor_encoder(BP.PORT_A))
     BP.offset_motor_encoder(BP.PORT_D, BP.get_motor_encoder(BP.PORT_D))

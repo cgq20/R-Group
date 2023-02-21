@@ -1,10 +1,6 @@
-import time     
-import brickpi3 
-import math 
-
-import time     
-import brickpi3 
-import math 
+import time
+import brickpi3
+import math
 import random
 
 BP = brickpi3.BrickPi3() 

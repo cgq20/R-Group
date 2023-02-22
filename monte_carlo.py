@@ -1,6 +1,6 @@
-import time
-import brickpi3
-import math
+import time     
+import brickpi3 
+import math 
 import random
 
 BP = brickpi3.BrickPi3() 
@@ -26,7 +26,6 @@ def forward(d):
     
     BP.set_motor_position(BP.PORT_A, int(d * 360/(math.pi * WHEEL_RADIUS)))
     BP.set_motor_position(BP.PORT_D, int(d * 360/(math.pi * WHEEL_RADIUS)))
-                                                                                                              #Should this be (d * 360/(2 * math.pi * WHEEL_RADIUS)))
     
     BP.offset_motor_encoder(BP.PORT_A, BP.get_motor_encoder(BP.PORT_A))
     BP.offset_motor_encoder(BP.PORT_D, BP.get_motor_encoder(BP.PORT_D))
@@ -35,13 +34,13 @@ def forward(d):
     
 def rotate(a):
     
-    BP.set_motor_position(BP.PORT_A, - int(AXLE_RADIUS * (330 * a * 2 / math.pi)/(math.pi * WHEEL_RADIUS)))
-    BP.set_motor_position(BP.PORT_D, int(AXLE_RADIUS * (330 * a * 2 / math.pi)/(math.pi * WHEEL_RADIUS)))
+    BP.set_motor_position(BP.PORT_A, - int(AXLE_RADIUS * (280 * a * 2 / math.pi)/(math.pi * WHEEL_RADIUS)))
+    BP.set_motor_position(BP.PORT_D, int(AXLE_RADIUS * (280 * a * 2 / math.pi)/(math.pi * WHEEL_RADIUS)))
     
     BP.offset_motor_encoder(BP.PORT_A, BP.get_motor_encoder(BP.PORT_A))
     BP.offset_motor_encoder(BP.PORT_D, BP.get_motor_encoder(BP.PORT_D))
     
-    time.sleep(2)
+    time.sleep(3)
     
     
 def distance(x, y, theta, Ax, Ay, Bx, By):
@@ -143,104 +142,15 @@ try:
     for i in range(NUMBER_OF_PARTICLES):
         particles.append([84,30,0,weight])
         
+    for i in range (10):
+        rotate(math.pi/2)
+        print("DONE")
     
-    
-    while True:
-        print("add a waypoint y/n ")
-        cont = input()
-        
-        if (cont == "n"):
-            break;
-            
-        print("enter x coord of destination(cm)")
-        x_coord = float(input())
-        print("enter y coord of destination (cm)")
-        y_coord = float(input())
 
-        x_distance = (x_coord  - curr_x_coord)
-        print("distance is: ", x_distance)
-        
-        y_distance = (y_coord - curr_y_coord)
-        
-        total_distance = math.sqrt(pow(x_distance,2) + pow(y_distance,2))
-        
-        final_angle = math.atan2(y_distance, x_distance)
-        
-        angle_change = final_angle - curr_angle
-        print("angle change is: ", angle_change)
-
-        rotate(angle_change)
-        forward(total_distance)
-        
-        print("got here")
-        
-        #sonar_measurement = BP.get_sensor(BP.PORT_3) + 2
-        sonar_measurement = 30
-        
-        print("not here")
-        
-        cumulative_weights = []
-        
-        cumulative_weights.append(particles[0][3])
-        
-        temp_particles = []
-        
-        for i in range(NUMBER_OF_PARTICLES - 1):
-            cumulative_weights.append((cumulative_weights[i] + particles[i + 1][3]))
-            
-        
-        for i in range(NUMBER_OF_PARTICLES):
-            rand_num = random.uniform(0, 1)
-            j = 0
-            while(cumulative_weights[j] < rand_num):
-                j += 1
-            temp_particles.append([particles[j][0], particles[j][1], particles[j][2], weight)
-            
-        for i in range(NUMBER_OF_PARTICLES):
-            e = random.gauss(0, 0.8)
-            f = random.gauss(0, 1)
-            
-            particles[i][0] = temp_particles[i][0] + (total_distance + e) * math.cos(temp_particles[i][2])
-    
-            particles[i][1] = temp_particles[i][1] + (total_distance + e) * math.sin(temp_particles[i][2])
-        
-            particles[i][2] = temp_particles[i][2] - (f * math.pi / 180)
-            
-            particles[i][3] = calculate_likelihood(temp_particles[i][0], temp_particles[i][1], temp_particles[i][2], sonar_measurement) * temp_particles[i][3]
-
-                
-            #particles2.append((particles[i][0], particles[i][1], particles[i][2]))
-        
-        
-        sum_weights = 0
-        
-        for i in range(NUMBER_OF_PARTICLES):
-            sum_weights += particles[i][3]
-            
-        for i in range(NUMBER_OF_PARTICLES):
-            particles[i][3] = particles[i][3]/sum_weights
-        
-        
-        #update curr x y theta
-        
-        sum_x = 0
-        sum_y = 0
-        sum_theta = 0
-        
-        for i in range(NUMBER_OF_PARTICLES):
-            sum_x += particles[i][0] * particles[i][3] 
-            sum_y += particles[i][1] * particles[i][3]
-            sum_theta += particles[i][2] * particles[i][3]
-            
-        curr_x_coord = sum_x
-        curr_y_coord = sum_y
-        curr_angle = sum_theta    
-            
             
         #draw correctly    
             
-        #print ("drawParticles:" + str(particles2))        
-        
+        #print ("drawParticles:" + str(particles2))             
 
         
 except KeyboardInterrupt:

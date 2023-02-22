@@ -190,20 +190,13 @@ def move_step(distance, angle_change, particles):
             temp_particle[2] += (angle_change + g)  
 
     for i in range(NUMBER_OF_PARTICLES):
-
-
         e = random.gauss(0, 1)
-
         f = random.gauss(0, 0.005)
 
         particles[i][0] = temp_particles[i][0] + (distance + e) * math.cos(temp_particles[i][2])
-
         particles[i][1] = temp_particles[i][1] + (distance + e) * math.sin(temp_particles[i][2])
-
-        particles[i][2] = temp_particles[i][2] + (f)
-
+        particles[i][2] = temp_particles[i][2] + (f) + curr_angle  # use updated curr_angle
         particles[i][3] = calculate_likelihood(particles[i][0], particles[i][1], particles[i][2], sonar_measurement) * weight
-
 
 
 
@@ -286,38 +279,29 @@ try:
         print(total_distance)
         
         final_angle = math.atan2(y_distance, x_distance)
-        
-        print("current angle is: ", curr_angle)
-        
         angle_change = final_angle - curr_angle
 
-        
         if (angle_change < - math.pi):
-            angle_change  += 2 * math.pi
-            
+            angle_change += 2 * math.pi
+
         if (angle_change > math.pi):
             angle_change += - (2 * math.pi)
-        
-        print("angle change is: ", angle_change * 180 / math.pi)
-        
+
         while(total_distance >= 20):
             (particles, curr_x_coord, curr_y_coord, curr_angle) = move_step(20, angle_change, particles)
-            x_distance = (x_coord  - curr_x_coord)
-            print("x_distance = ", x_distance)
+            x_distance = (x_coord - curr_x_coord)
             y_distance = (y_coord - curr_y_coord)
-            print("y distance =", y_distance)
-            total_distance = math.sqrt(pow(x_distance,2) + pow(y_distance,2))
-            print("tot dist:", total_distance)
+            total_distance = math.sqrt(pow(x_distance, 2) + pow(y_distance, 2))
             final_angle = math.atan2(y_distance, x_distance)
-            print("final angle: ", final_angle)
-            print("current angle = ", curr_angle * 180 / math.pi)
             angle_change = final_angle - curr_angle
-            
+
             if (angle_change < - math.pi):
-                angle_change  += 2 * math.pi
-            
+                angle_change += 2 * math.pi
+
             if (angle_change > math.pi):
                 angle_change += - (2 * math.pi)
+
+            curr_angle += angle_change  # update the current orientation
             
             print("angle change:", angle_change *180/math.pi)
 
